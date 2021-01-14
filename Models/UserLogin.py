@@ -6,7 +6,7 @@ from app import db
 
 # from flask import Blueprint
 
-class UserLogin(db.Document):
+class UserLogins(db.Document):
     name = db.StringField(required=True)
     email = db.EmailField(required=True)
     password = db.StringField(required=True)

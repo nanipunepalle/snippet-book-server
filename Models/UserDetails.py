@@ -1,3 +1,37 @@
+import json
+from flask import Flask, request, jsonify
+
+from app import app
+from app import db
+
+# from flask import Blueprint
+
+class UserDetails(db.Document):
+    name = db.StringField(required=True)
+    email = db.EmailField(required=True)
+    user_id = db.StringField(required=True)
+    profile_pic = db.StringField()
+    bio = db.StringField()
+    verified = db.BooleanField()
+    def to_json(self):
+        return {"name": self.name,
+                "email": self.email,
+                "user_id": self.user_id}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # @app.route('/add', methods=['POST'])
 # def add_user():
 #     user = User(name=request.form.get('name'),

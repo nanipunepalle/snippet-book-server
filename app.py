@@ -2,15 +2,20 @@ from flask import Flask
 from flask_mongoengine import MongoEngine
 import json
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = MongoEngine(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 import Models.UserLogin
+import Models.UserDetails
+import Models.SnippetPost
 import Routes.AuthRoute
+import Routes.PostRoute
 # from hello import urls_blueprint;
 # app.register_blueprint(urls_blueprint)
 
