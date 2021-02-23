@@ -16,6 +16,7 @@ import Models.UserDetails
 import Models.SnippetPost
 import Routes.AuthRoute
 import Routes.PostRoute
+import Models.PostLikes
 # from hello import urls_blueprint;
 # app.register_blueprint(urls_blueprint)
 
