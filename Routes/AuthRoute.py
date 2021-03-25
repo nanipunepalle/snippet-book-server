@@ -13,6 +13,10 @@ from Models.UserDetails import UserDetails
 
 bcrypt = Bcrypt(app)
 
+@app.route('/api2',methods=["GET"])
+def sample_func():
+    print("server working")
+    return "server working"
 
 # route to signup
 @app.route('/api/signup', methods=["POST"])
