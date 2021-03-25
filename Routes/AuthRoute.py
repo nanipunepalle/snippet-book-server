@@ -19,7 +19,7 @@ def sample_func():
     return "server working"
 
 # route to signup
-@app.route('/api/signup', methods=["POST"])
+@app.route('/api2/signup', methods=["POST"])
 @cross_origin(supports_credentials=True,cross_origin=True)
 def user_signup():
     req_data = json.loads(request.data)
@@ -52,7 +52,7 @@ def user_signup():
 
 
 # route to signin
-@app.route('/api/signin', methods=["POST"])
+@app.route('/api2/signin', methods=["POST"])
 def user_signin():
     req_data = json.loads(request.data)
     user = UserLogins.objects(email=req_data['email']).first()
@@ -69,7 +69,7 @@ def user_signin():
 
 
 # route to get the current user based on token
-@app.route('/api/user/me', methods=["GET"])
+@app.route('/api2/user/me', methods=["GET"])
 def get_user():
     token = request.headers.get('Authorization').replace('Bearer ','')
     data = jwt.decode(token,app.config["SECRET_KEY"],algorithms=["HS256"])
@@ -82,7 +82,7 @@ def get_user():
 
 # route to user logout
 
-@app.route('/api/user/logout', methods=["GET"])
+@app.route('/api2/user/logout', methods=["GET"])
 def user_logout():
     token = request.headers.get('Authorization').replace('Bearer ','')
     print(token)

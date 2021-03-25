@@ -13,7 +13,8 @@ from Models.SnippetPost import SnippetPost
 from Models.PostLikes import PostLikes
 
 
-@app.route('/api/user/add_snippet', methods=["POST"])
+
+@app.route('/api2/user/add_snippet', methods=["POST"])
 def add_snippet():
     req_data = json.loads(request.data)
     token = request.headers.get('Authorization').replace('Bearer ', '')
@@ -40,12 +41,12 @@ def add_snippet():
         return {"message": "not found"}, 202
 
 
-@app.route('/api/get_public_posts', methods=["GET"])
+@app.route('/api2/get_public_posts', methods=["GET"])
 def get_public_posts():
    posts = SnippetPost.objects(access_type="public")
    return jsonify(posts),200
 
-@app.route('/api/get_all_posts', methods=["GET"])
+@app.route('/api2/get_all_posts', methods=["GET"])
 def get_all_posts():
     token = request.headers.get('Authorization').replace('Bearer ', '')
     data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
@@ -58,7 +59,7 @@ def get_all_posts():
         return {"message": "not found"}, 201
 
 #
-@app.route('/api/get_your_posts', methods=["GET"])
+@app.route('/api2/get_your_posts', methods=["GET"])
 def get_your_posts():
     token = request.headers.get('Authorization').replace('Bearer ', '')
     data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
@@ -70,7 +71,7 @@ def get_your_posts():
         return {"message": "not found"}, 201
 
 #getting the particular post with it's id
-@app.route('/api/get_post', methods=["GET"])
+@app.route('/api2/get_post', methods=["GET"])
 def get_post():
     post_id = request.args["id"]
     post = SnippetPost.objects(id=post_id)
@@ -81,7 +82,7 @@ def get_post():
 
 
 #adding like impression tot the post
-@app.route('/api/post/add_like', methods=["GET"])
+@app.route('/api2/post/add_like', methods=["GET"])
 def add_like():
     token = request.headers.get('Authorization').replace('Bearer ', '')
     if token and token != 'null':
