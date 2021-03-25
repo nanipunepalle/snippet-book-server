@@ -8,7 +8,7 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 app.config.from_object('config')
 db = MongoEngine(app)
-CORS(app, resources={r"/api2/*": {"origins": "*"}})
+CORS(app)
 
 
 import Models.UserLogin
