@@ -65,6 +65,25 @@ def edit_snippet():
     else:
         return {"message": "not found"}, 202
 
+@app.route('/api2/user/delete_snippet', methods=["POST"])
+def delete_snippet():
+    req_data = json.loads(request.data)
+    token = request.headers.get('Authorization').replace('Bearer ', '')
+    data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+    user = UserLogins.objects(id=data['public_id'], token__in=[token]).first()
+    post = SnippetPost.objects(id=req_data['post_id']).first()
+    if user:
+        try:
+            if data['public_id'] == post['user_id']:
+                SnippetPost.objects(id=req_data['post_id']).delete()
+                posts = SnippetPost.objects(Q(access_type="public") | Q(user_id=str(user.id)))
+                return {"message": "success","posts": posts}, 200
+            else:
+                return {"message": "not authorised"}, 202
+        except Exception as e:
+            return {"message": e}, 201
+    else:
+        return {"message": "not found"}, 202
 
 @app.route('/api2/get_public_posts', methods=["GET"])
 def get_public_posts():
