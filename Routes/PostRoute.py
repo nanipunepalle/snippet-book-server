@@ -97,7 +97,7 @@ def get_all_posts():
     user = UserLogins.objects(id=data['public_id'], token__in=[token]).first()
     if user :
         posts = SnippetPost.objects(Q(access_type="public") | Q(user_id=str(user.id)))
-        user_likes = PostLikes.objects(user_id=str(user.id)).filter().values_list('post_id')
+        # user_likes = PostLikes.objects(user_id=str(user.id)).filter().values_list('post_id')
         return jsonify(posts), 200
     else:
         return {"message": "not found"}, 201
@@ -114,6 +114,17 @@ def get_your_posts():
     else:
         return {"message": "not found"}, 201
 
+@app.route('/api2/get_liked_posts', methods=["GET"])
+def get_liked_posts():
+    token = request.headers.get('Authorization').replace('Bearer ', '')
+    data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+    user = UserLogins.objects(id=data['public_id'], token__in=[token]).first()
+    if user :
+        user_likes = PostLikes.objects(user_id=str(user.id)).filter().values_list('post_id')
+        return jsonify(user_likes), 200
+    else:
+        return {"message": "not found"}, 201
+
 #getting the particular post with it's id
 @app.route('/api2/get_post', methods=["GET"])
 def get_post():
@@ -125,7 +136,7 @@ def get_post():
         return {"message": "not found"}, 201
 
 
-#adding like impression tot the post
+#adding like impression to the post
 @app.route('/api2/post/add_like', methods=["GET"])
 def add_like():
     token = request.headers.get('Authorization').replace('Bearer ', '')
