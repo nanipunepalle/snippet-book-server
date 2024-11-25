@@ -1,0 +1,52 @@
+name: Deploy to Azure VM with Password
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Install sshpass
+    - name: Install sshpass
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sshpass
+
+    # Step 3: Deploy to Azure VM
+    - name: Deploy to Azure VM
+      run: |
+        echo "Starting deployment to Azure VM..."
+        sshpass -p "${{ secrets.AZURE_VM_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }} << 'EOF'
+          set -e
+          echo "Connected to Azure VM"
+          cd /home/lalithpunepalle/snippet-book/snippet-book-server
+          git pull origin master     # Pull the latest changes
+
+          # Check if the virtual environment already exists
+          if [ -d "my_env" ]; then
+            echo "Virtual environment exists, activating..."
+            source my_env/bin/activate
+          else
+            # If not, create a new virtual environment
+            echo "Creating a new virtual environment..."
+            python3 -m venv my_env
+            source my_env/bin/activate
+          fi
+
+          # Install/update dependencies
+          if [ -f requirements.txt ]; then
+            echo "Installing dependencies..."
+            pip install -r requirements.txt
+          fi
+
+          # Restart the application or server
+          sudo systemctl restart snippetbook  # Replace with your service name
+        EOF
