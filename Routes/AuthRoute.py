@@ -16,7 +16,7 @@ bcrypt = Bcrypt(app)
 @app.route('/api2',methods=["GET"])
 def sample_func():
     print("server working")
-    return "server working"
+    return "server is up and running"
 
 # route to signup
 @app.route('/api2/signup', methods=["POST"])
